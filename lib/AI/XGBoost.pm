@@ -14,9 +14,13 @@ use warnings;
 
 =head1 DESCRIPTION
 
-Perl wrapper for XGBoost library. This version only wraps the C API.
+Perl wrapper for XGBoost library. This version only wraps part of the C API.
 
 The documentation can be found in L<AI::XGBoost::CAPI>
+
+Currently this module need the xgboost binary available in your system. 
+I'm going to make an Alien module for xgboost but meanwhile you need to
+compile yourself xgboost: L<https://github.com/dmlc/xgboost>
 
 =head1 ROADMAP
 

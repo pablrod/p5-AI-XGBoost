@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library https://github.com/dmlc/xgboost
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # SYNOPSIS
 
@@ -46,9 +46,13 @@ AI::XGBoost::CAPI::XGBoosterFree($booster);
 
 # DESCRIPTION
 
-Perl wrapper for XGBoost library. This version only wraps the C API.
+Perl wrapper for XGBoost library. This version only wraps part of the C API.
 
 The documentation can be found in [AI::XGBoost::CAPI](https://metacpan.org/pod/AI::XGBoost::CAPI)
+
+Currently this module need the xgboost binary available in your system. 
+I'm going to make an Alien module for xgboost but meanwhile you need to
+compile yourself xgboost: [https://github.com/dmlc/xgboost](https://github.com/dmlc/xgboost)
 
 # ROADMAP
 
