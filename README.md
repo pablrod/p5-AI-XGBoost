@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library https://github.com/dmlc/xgboost
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -50,13 +50,38 @@ Perl wrapper for XGBoost library. This version only wraps the C API.
 
 The documentation can be found in [AI::XGBoost::CAPI](https://metacpan.org/pod/AI::XGBoost::CAPI)
 
+# ROADMAP
+
+The goal is to make a full wrapper for XGBoost.
+
+## VERSIONS
+
+- 0.1 
+
+    Full raw C API available as AI::XGBoost::CAPI::Raw
+
+- 0.2 
+
+    Full C API "easy" to use, with PDL support as AI::XGBoost::CAPI
+
+    Easy means clients don't have to use FFI::Platypus or modules dealing
+    with C structures
+
+- 0.3
+
+    Object oriented API Moose based with DMatrix and Booster classes
+
+- 0.4
+
+    Complete object oriented API
+
 # AUTHOR
 
 Pablo Rodríguez González <pablo.rodriguez.gonzalez@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-Copyright (c) 2017 by Pablo Rodríguez González.
+This software is Copyright (c) 2017 by Pablo Rodríguez González.
 
 This is free software, licensed under:
 

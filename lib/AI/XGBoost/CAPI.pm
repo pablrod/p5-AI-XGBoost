@@ -66,6 +66,70 @@ a loaded data matrix
 
 sub XGDMatrixCreateFromFile :Args(string, int, opaque*) :Native(xgboost) :Returns(int) {}
 
+=head2 XGDMatrixCreateFromMat
+
+Create matrix content from dense matrix
+
+Parameters:
+
+=over 4
+
+=item data 
+
+pointer to the data space
+
+=item nrow
+
+number of rows
+
+=item ncol
+
+number columns
+
+=item missing
+
+which value to represent missing value
+
+=item out
+
+created dmatrix
+
+=back
+
+=cut
+
+sub XGDMatrixCreateFromMat :Args(float *, uint64, uint64, float, opaque*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixSliceDMatrix
+
+Create a new dmatrix from sliced content of existing matrix
+
+Parameters:
+
+=over 4
+
+=item handle
+
+instance of data matrix to be sliced
+
+=item idxset
+
+index set
+
+=item len
+
+length of index set
+
+=item out
+
+a sliced new matrix
+
+=back
+
+=cut
+
+sub XGDMatrixSliceDMatrix :Args(opaque, int *, uint64, opaque*) :Native(xgboost) :Returns(int) {}
+
 =head2 XGDMatrixNumRow
 
 Get number of rows.
@@ -109,6 +173,186 @@ The address to hold number of cols.
 =cut
 
 sub XGDMatrixNumCol :Args(opaque, uint64*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixSaveBinary
+
+load a data matrix into binary file
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item fname
+
+file name
+
+=item silent
+
+print statistics when saving
+
+=back
+
+=cut
+
+sub XGDMatrixSaveBinary :Args(opaque, string, int) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixSetFloatInfo
+
+Set float vector to a content in info
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item field
+
+field name, can be label, weight
+
+=item array
+
+pointer to float vector
+
+=item len
+
+length of array
+
+=back
+
+=cut
+
+sub XGDMatrixSetFloatInfo :Args(opaque, string, float *, uint64) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixSetUIntInfo
+
+Set uint32 vector to a content in info
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item field
+
+field name, can be label, weight
+
+=item array
+
+pointer to unsigned int vector
+
+=item len
+
+length of array
+
+=back
+
+=cut
+
+sub XGDMatrixSetUIntInfo :Args(opaque, string, uint32 *, uint64) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixSetGroup
+
+Set label of the training matrix
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item group
+
+pointer to group size
+
+=item len
+
+length of the array
+
+=back
+
+=cut
+
+sub XGDMatrixSetGroup :Args(opaque, uint32 *, uint64) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixGetFloatInfo
+
+Get float info vector from matrix
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item field
+
+field name
+
+=item out_len
+
+used to set result length
+
+=item out_dptr
+
+pointer to the result
+
+=back
+
+=cut
+
+sub XGDMatrixGetFloatInfo :Args(opaque, string, uint64 *, opaque *) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixGetUIntInfo
+
+Get uint32 info vector from matrix
+
+Parameters:
+
+=over 4
+
+=item handle
+
+a instance of data matrix
+
+=item field
+
+field name
+
+=item out_len
+
+The length of the field
+
+=item out_dptr
+
+pointer to the result
+
+=back
+
+=cut
+
+sub XGDMatrixGetUIntInfo :Args(opaque, string, uint64 *, opaque *) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixFree
+
+Free space in data matrix
+
+=cut
+
+sub XGDMatrixFree :Args(opaque) :Native(xgboost) :Returns(int) {} 
 
 =head2 XGBoosterCreate
 
