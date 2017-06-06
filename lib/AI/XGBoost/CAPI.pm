@@ -66,6 +66,86 @@ a loaded data matrix
 
 sub XGDMatrixCreateFromFile :Args(string, int, opaque*) :Native(xgboost) :Returns(int) {}
 
+=head2 XGDMatrixCreateFromCSREx
+
+Create a matrix content from CSR fromat
+
+Parameters:
+
+=over 4
+
+=item indptr
+
+pointer to row headers
+
+=item indices
+
+findex
+
+=item data
+
+fvalue
+
+=item nindptr
+
+number of rows in the matrix + 1
+
+=item nelem
+
+number of nonzero elements in the matrix
+
+=item num_col
+
+number of columns; when it's set to 0, then guess from data
+
+=item out
+
+created dmatrix
+
+=back
+
+=cut
+
+sub XGDMatrixCreateFromCSREx :Args(size_t*, uint*, float*, size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGDMatrixCreateFromCSCEx
+
+Create a matrix content from CSC format
+
+Parameters:
+
+=over 4
+
+=item col_ptr
+
+pointer to col headers
+
+=item indices
+
+findex
+
+=item data
+
+fvalue
+
+=item nindptr
+
+number of rows in the matrix + 1
+
+=item nelem
+
+number of nonzero elements in the matrix
+
+=item num_row
+
+number of rows; when it's set to 0, then guess from data
+
+=back
+
+=cut
+
+sub XGDMatrixCreateFromCSCEx :Args(size_t*, uint*, float*, size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+
 =head2 XGDMatrixCreateFromMat
 
 Create matrix content from dense matrix
@@ -398,6 +478,67 @@ handle to be freed
 
 sub XGBoosterFree :Args(opaque) :Native(xgboost) :Returns(int) {}
 
+=head2 XGBoosterSetParam
+
+Update the model in one round using dtrain
+
+Parameters:
+
+=over 4
+
+=item handle
+
+handle
+
+=item name
+
+parameter name
+
+=item value
+
+value of parameter
+
+=back
+
+=cut
+
+sub XGBoosterSetParam :Args(opaque, string, string) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterBoostOneIter
+
+Update the modelo, by directly specify grandient and second order gradient,
+this can be used to replace UpdateOneIter, to support customized loss function
+
+Parameters:
+
+=over 4
+
+=item handle
+
+handle
+
+=item dtrain
+
+training data
+
+=item grad
+
+gradient statistics
+
+=item hess
+
+second order gradinet statistics
+
+=item len
+
+length of grad/hess array
+
+=back
+
+=cut
+
+sub XGBoosterBoostOneIter :Args(opaque, opaque, float*, float*, uint64) :Native(xgboost) :Returns(int) {}
+
 =head2 XGBoosterUpdateOneIter
 
 Update the model in one round using dtrain
@@ -482,5 +623,50 @@ used to set a pointer to array
 =cut
 
 sub XGBoosterPredict :Args(opaque, opaque, int, uint, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterLoadModel
+
+Load model form existing file
+
+Parameters:
+
+=over 4
+
+=item handle
+
+handle
+
+=item fname
+
+file name
+
+=back
+
+=cut
+
+sub XGBoosterLoadModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterSaveModel
+
+Save model into existing file
+
+Parameters:
+
+=over 4
+
+=item handle
+
+handle
+
+=item fname
+
+file name
+
+=back
+
+
+=cut
+
+sub XGBoosterSaveModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
 
 1;

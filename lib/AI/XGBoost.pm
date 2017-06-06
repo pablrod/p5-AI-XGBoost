@@ -4,7 +4,7 @@ use warnings;
 
 # VERSION
 
-# ABSTRACT: Perl wrapper for XGBoost library https://github.com/dmlc/xgboost
+# ABSTRACT: Perl wrapper for XGBoost library L<https://github.com/dmlc/xgboost>
 
 =encoding utf-8
 

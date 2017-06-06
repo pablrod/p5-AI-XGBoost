@@ -1,6 +1,6 @@
 # NAME
 
-AI::XGBoost - Perl wrapper for XGBoost library https://github.com/dmlc/xgboost
+AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost](https://github.com/dmlc/xgboost)
 
 # VERSION
 
