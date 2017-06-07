@@ -31,6 +31,8 @@ my $predictions = $ffi->cast(opaque => "float[$out_len]", $out_result);
 #say join "\n", @$predictions;
 
 AI::XGBoost::CAPI::RAW::XGBoosterFree($booster);
+AI::XGBoost::CAPI::RAW::XGDMatrixFree($dtrain);
+AI::XGBoost::CAPI::RAW::XGDMatrixFree($dtest);
 
 
 

@@ -49,6 +49,10 @@ Object oriented API Moose based with DMatrix and Booster classes
 
 Complete object oriented API
 
+=item 0.5
+
+Use perl signatures (L<https://metacpan.org/pod/distribution/perl/pod/perlexperiment.pod#Subroutine-signatures>)
+
 =back
 
 =head1 SEE ALSO

@@ -42,6 +42,8 @@ my $predictions = $ffi->cast(opaque => "float[$out_len]", $out_result);
 #say join "\n", @$predictions;
 
 AI::XGBoost::CAPI::RAW::XGBoosterFree($booster);
+AI::XGBoost::CAPI::RAW::XGDMatrixFree($dtrain);
+AI::XGBoost::CAPI::RAW::XGDMatrixFree($dtest);
 ```
 
 # DESCRIPTION
@@ -78,6 +80,10 @@ The goal is to make a full wrapper for XGBoost.
 - 0.4
 
     Complete object oriented API
+
+- 0.5
+
+    Use perl signatures ([https://metacpan.org/pod/distribution/perl/pod/perlexperiment.pod#Subroutine-signatures](https://metacpan.org/pod/distribution/perl/pod/perlexperiment.pod#Subroutine-signatures))
 
 # SEE ALSO
 
