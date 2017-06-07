@@ -1,4 +1,4 @@
-package AI::XGBoost::CAPI;
+package AI::XGBoost::CAPI::RAW;
 use strict;
 use warnings;
 
