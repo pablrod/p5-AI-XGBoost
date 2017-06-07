@@ -10,7 +10,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-# EXAMPLE: examples/capi_raw.pl
+# EXAMPLE: examples/capi.pl
 
 =head1 DESCRIPTION
 
