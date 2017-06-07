@@ -18,6 +18,9 @@ use Exporter::Easy (
     );
 use AI::XGBoost::CAPI::RAW;
 use FFI::Platypus;
+use Exception::Class (
+    'XGBoostException'
+);
 
 # VERSION
 
@@ -121,6 +124,18 @@ sub XGDMatrixNumCol {
 
 =head2 XGDMatrixFree
 
+Free space in data matrix
+
+Parameters:
+
+=over 4
+
+=item matrix
+
+DMatrix to be freed
+
+=back
+
 =cut
 
 sub XGDMatrixFree {
@@ -130,6 +145,18 @@ sub XGDMatrixFree {
 }
 
 =head2 XGBoosterCreate
+
+Create XGBoost learner
+
+Parameters:
+
+=over 4
+
+=item matrices
+
+matrices that are set to be cached
+
+=back
 
 =cut
 
@@ -142,6 +169,26 @@ sub XGBoosterCreate {
 
 =head2 XGBoosterUpdateOneIter
 
+Update the model in one round using train matrix
+
+Parameters:
+
+=over 4
+
+=item booster
+
+XGBoost learner to train
+
+=item iter
+
+current iteration rounds
+
+=item train_matrix
+
+training data
+
+=back
+
 =cut
 
 sub XGBoosterUpdateOneIter {
@@ -151,6 +198,54 @@ sub XGBoosterUpdateOneIter {
 }
 
 =head2 XGBoosterPredict
+
+Make prediction based on train matrix
+
+Parameters:
+
+=over 4
+
+=item booster
+
+XGBoost learner 
+
+=item data_matrix
+
+Data matrix with the elements to predict
+
+=item option_mask
+
+bit-mask of options taken in prediction, possible values
+
+=over 4
+
+=item 
+
+0: normal prediction
+
+=item
+
+1: output margin instead of transformed value
+
+=item
+
+2: output leaf index of trees instead of leaf value, note leaf index is unique per tree
+
+=item 
+
+4: output feature contributions to individual predictions
+
+=back
+
+
+=item ntree_limit
+
+limit number of trees used for prediction, this is only valid for boosted trees
+when the parameter is set to 0, we will use all the trees
+
+=back
+
+Returns an arrayref with the predictions corresponding to the rows of data matrix
 
 =cut 
 
@@ -165,6 +260,18 @@ sub XGBoosterPredict {
 
 =head2 XGBoosterFree
 
+Free booster object
+
+Parameters:
+
+=over 4
+
+=item booster
+
+booster to be freed
+
+=back
+
 =cut
 
 sub XGBoosterFree {
@@ -173,11 +280,15 @@ sub XGBoosterFree {
     return ();
 }
 
+# _CheckCall
+# 
+#  Check return code and if necesary, launch an exception
+#
 sub _CheckCall {
     my ($return_code) = @_;
     if ($return_code) {
         my $error_message = AI::XGBoost::CAPI::RAW::XGBGetLastError();
-        die $error_message;
+        XGBoostException->throw(error => $error_message);
     }
 }
 
