@@ -251,6 +251,8 @@ Returns an arrayref with the predictions corresponding to the rows of data matri
 
 sub XGBoosterPredict {
     my ($booster, $data_matrix, $option_mask, $ntree_limit) = @_;
+    $option_mask //= 0;
+    $ntree_limit //= 0;
     my $out_len = 0;
     my $out_result = 0;
     _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterPredict($booster, $data_matrix, $option_mask, $ntree_limit, \$out_len, \$out_result) );
