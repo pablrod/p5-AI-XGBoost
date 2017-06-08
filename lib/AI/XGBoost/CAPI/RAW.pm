@@ -565,6 +565,8 @@ training data
 
 sub XGBoosterUpdateOneIter :Args(opaque, int, opaque) :Native(xgboost) :Returns(int) {}
 
+sub XGBoosterEvalOneIter :Args(opaque, int, opaque[], opaque*, uint64, opaque*) :Native(xgboost) :Returns(int) {}
+
 =head2 XGBoosterPredict
 
 Make prediction based on dmat
@@ -668,5 +670,36 @@ file name
 =cut
 
 sub XGBoosterSaveModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
+
+sub XGBoosterLoadModelFromBuffer :Args(opaque, opaque, uint64) :Native(xgboost) :Returns(int) {} 
+
+sub XGBoosterGetModelRaw :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+
+sub XGBoosterDumpModel :Args(opaque, string, int, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+
+sub XGBoosterDumpModelWithFeatures :Args(opaque, int, opaque*, opaque*, int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
+
+
+sub XGBoosterDumpModelExWithFeatures :Args(opaque, int, opaque*, opaque*, int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
+
+
+
+=head2 XGBoosterSetAttr
+
+=cut
+
+sub XGBoosterSetAttr :Args(opaque, string, string) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterGetAttr
+
+=cut
+
+sub XGBoosterGetAttr :Args(opaque, string, opaque*, int*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterGetAttrNames
+
+=cut
+
+sub XGBoosterGetAttrNames :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
 1;
