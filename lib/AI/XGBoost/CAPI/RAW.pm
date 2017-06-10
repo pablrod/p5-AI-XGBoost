@@ -671,17 +671,18 @@ file name
 
 sub XGBoosterSaveModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
 
+
 sub XGBoosterLoadModelFromBuffer :Args(opaque, opaque, uint64) :Native(xgboost) :Returns(int) {} 
 
 sub XGBoosterGetModelRaw :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
 sub XGBoosterDumpModel :Args(opaque, string, int, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
-sub XGBoosterDumpModelWithFeatures :Args(opaque, int, opaque*, opaque*, int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
+sub XGBoosterDumpModelEx :Args(opaque, string, int, string, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
+sub XGBoosterDumpModelWithFeatures :Args(opaque, int, opaque[], opaque[], int, uint64*, opaque*) Native(xgboost) :Returns(int) {}
 
-sub XGBoosterDumpModelExWithFeatures :Args(opaque, int, opaque*, opaque*, int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
-
+sub XGBoosterDumpModelExWithFeatures :Args(opaque, int, opaque[], opaque[], int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
 
 
 =head2 XGBoosterSetAttr
