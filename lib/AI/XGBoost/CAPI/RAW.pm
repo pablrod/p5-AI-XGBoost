@@ -565,7 +565,7 @@ training data
 
 sub XGBoosterUpdateOneIter :Args(opaque, int, opaque) :Native(xgboost) :Returns(int) {}
 
-sub XGBoosterEvalOneIter :Args(opaque, int, opaque[], opaque*, uint64, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterEvalOneIter :Args(opaque, int, opaque[], opaque[], uint64, opaque*) :Native(xgboost) :Returns(int) {}
 
 =head2 XGBoosterPredict
 

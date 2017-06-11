@@ -11,6 +11,7 @@ use Exporter::Easy (
                 XGDMatrixFree
                 XGBoosterCreate
                 XGBoosterUpdateOneIter
+                XGBoosterBoostOneIter
                 XGBoosterPredict
                 XGBoosterFree
                 XGBoosterDumpModel
@@ -201,6 +202,24 @@ sub XGBoosterUpdateOneIter {
     return ();
 }
 
+sub XGBoosterBoostOneIter {
+    my ($booster, $train_matrix, $gradient, $hessian) = @_;
+    my $out_result = 0;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterBoostOneIter($booster, $train_matrix, $gradient, $hessian, scalar (@$gradient)));
+    return ();
+}
+
+sub XGBoosterEvalOneIter {
+    my ($booster, $iter, $matrices, $matrices_names) = @_;
+    my $out_result = 0;
+    my $number_of_matrices = scalar @$matrices;
+    my $ffi = FFI::Platypus->new();
+    my $array_of_opaque_matrices_names = [map {$ffi->cast(string => "opaque", $_)} @$matrices_names];
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterEvalOneIter($booster, $iter, $matrices, $array_of_opaque_matrices_names, $number_of_matrices, \$out_result));
+    $out_result = $ffi->cast(opaque => "opaque[$number_of_matrices]", $out_result);
+    return [map {$ffi->cast(opaque => "string", $_)} @$out_result ];
+}
+
 =head2 XGBoosterPredict
 
 Make prediction based on train matrix
@@ -323,8 +342,11 @@ sub XGBoosterDumpModelExWithFeatures {
     my ($booster, $feature_names, $feature_types, $with_stats, $format) = @_;
     my $out_len = 0;
     my $out_result = 0;
-    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterDumpModelExWithFeatures($booster, (scalar @$feature_names), $feature_names, $feature_types, $with_stats, $format, \$out_len, \$out_result) );
     my $ffi = FFI::Platypus->new();
+    my $number_of_features = scalar @$feature_names;
+    my $array_of_opaque_feature_names = [map {$ffi->cast(string => "opaque", $_)} @$feature_names];
+    my $array_of_opaque_feature_types = [map {$ffi->cast(string => "opaque", $_)} @$feature_types];
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterDumpModelExWithFeatures($booster, $number_of_features, $array_of_opaque_feature_names, $array_of_opaque_feature_types, $with_stats, $format, \$out_len, \$out_result) );
     $out_result = $ffi->cast(opaque => "opaque[$out_len]", $out_result);
     return [map {$ffi->cast(opaque => "string", $_)} @$out_result ];
 }
