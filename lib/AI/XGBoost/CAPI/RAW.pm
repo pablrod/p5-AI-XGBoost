@@ -178,7 +178,7 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromMat :Args(float *, uint64, uint64, float, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromMat :Args(float[], uint64, uint64, float, opaque*) :Native(xgboost) :Returns(int) {}
 
 =head2 XGDMatrixSliceDMatrix
 
