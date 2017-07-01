@@ -106,7 +106,7 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromCSREx :Args(size_t*, uint*, float*, size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromCSREx :Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
 
 =head2 XGDMatrixCreateFromCSCEx
 
@@ -144,7 +144,7 @@ number of rows; when it's set to 0, then guess from data
 
 =cut
 
-sub XGDMatrixCreateFromCSCEx :Args(size_t*, uint*, float*, size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromCSCEx :Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
 
 =head2 XGDMatrixCreateFromMat
 
@@ -308,7 +308,7 @@ length of array
 
 =cut
 
-sub XGDMatrixSetFloatInfo :Args(opaque, string, float *, uint64) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSetFloatInfo :Args(opaque, string, float[], uint64) :Native(xgboost) :Returns(int) {}
 
 =head2 XGDMatrixSetUIntInfo
 
@@ -537,7 +537,7 @@ length of grad/hess array
 
 =cut
 
-sub XGBoosterBoostOneIter :Args(opaque, opaque, float*, float*, uint64) :Native(xgboost) :Returns(int) {}
+sub XGBoosterBoostOneIter :Args(opaque, opaque, float[], float[], uint64) :Native(xgboost) :Returns(int) {}
 
 =head2 XGBoosterUpdateOneIter
 
