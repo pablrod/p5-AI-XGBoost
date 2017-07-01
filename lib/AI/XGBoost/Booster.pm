@@ -1,4 +1,4 @@
-package AI::XGBoost::Boster;
+package AI::XGBoost::Booster;
 
 use strict;
 use warnings;
