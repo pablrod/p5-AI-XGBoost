@@ -565,6 +565,10 @@ training data
 
 sub XGBoosterUpdateOneIter :Args(opaque, int, opaque) :Native(xgboost) :Returns(int) {}
 
+=head2 XGBoosterEvalOneIter
+
+=cut
+
 sub XGBoosterEvalOneIter :Args(opaque, int, opaque[], opaque[], uint64, opaque*) :Native(xgboost) :Returns(int) {}
 
 =head2 XGBoosterPredict
@@ -671,16 +675,39 @@ file name
 
 sub XGBoosterSaveModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
 
+=head2 XGBoosterLoadModelFromBuffer
+
+=cut
 
 sub XGBoosterLoadModelFromBuffer :Args(opaque, opaque, uint64) :Native(xgboost) :Returns(int) {} 
 
+=head2 XGBoosterGetModelRaw
+
+=cut
+
 sub XGBoosterGetModelRaw :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterDumpModel
+
+=cut
 
 sub XGBoosterDumpModel :Args(opaque, string, int, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
+=head2 XGBoosterDumpModelEx
+
+=cut
+
 sub XGBoosterDumpModelEx :Args(opaque, string, int, string, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
 
+=head2 XGBoosterDumpModelWithFeatures
+
+=cut
+
 sub XGBoosterDumpModelWithFeatures :Args(opaque, int, opaque[], opaque[], int, uint64*, opaque*) Native(xgboost) :Returns(int) {}
+
+=head2 XGBoosterDumpModelExWithFeatures
+
+=cut
 
 sub XGBoosterDumpModelExWithFeatures :Args(opaque, int, opaque[], opaque[], int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
 

@@ -202,12 +202,20 @@ sub XGBoosterUpdateOneIter {
     return ();
 }
 
+=head2 XGBoosterBoostOneIter
+
+=cut
+
 sub XGBoosterBoostOneIter {
     my ($booster, $train_matrix, $gradient, $hessian) = @_;
     my $out_result = 0;
     _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterBoostOneIter($booster, $train_matrix, $gradient, $hessian, scalar (@$gradient)));
     return ();
 }
+
+=head2 XGBoosterEvalOneIter
+
+=cut
 
 sub XGBoosterEvalOneIter {
     my ($booster, $iter, $matrices, $matrices_names) = @_;
