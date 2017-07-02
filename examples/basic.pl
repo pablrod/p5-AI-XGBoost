@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 use utf8;
-
+use 5.010;
 use aliased 'AI::XGBoost::DMatrix';
+use AI::XGBoost qw(train);
 
 # We are going to solve a binary classification problem:
 #  Mushroom poisonous or not
@@ -18,6 +19,13 @@ my $test_data = DMatrix->FromFile(filename => 'agaricus.txt.test');
 # XGBoost Tree Booster has some parameters that we can tune
 # For this example we are going to use some "defaults"
 
+say "Training...";
+my $booster = train(data => $train_data, number_of_rounds => 10);
+
+say "Predicting...";
+my $predictions = $booster->predict(data => $test_data);
+
+say join "\n", @$predictions[0 .. 10];
 
 
 

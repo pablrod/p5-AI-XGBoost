@@ -42,6 +42,10 @@ Currently this module need the xgboost binary available in your system.
 I'm going to make an Alien module for xgboost but meanwhile you need to
 compile yourself xgboost: [https://github.com/dmlc/xgboost](https://github.com/dmlc/xgboost)
 
+# FUNCTIONS
+
+## train
+
 # ROADMAP
 
 The goal is to make a full wrapper for XGBoost.

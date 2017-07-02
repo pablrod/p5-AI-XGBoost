@@ -2,6 +2,11 @@ package AI::XGBoost;
 use strict;
 use warnings;
 
+use AI::XGBoost::Booster;
+use Exporter::Easy (
+    OK => ['train']
+);
+
 # VERSION
 
 # ABSTRACT: Perl wrapper for XGBoost library L<https://github.com/dmlc/xgboost>
@@ -21,6 +26,25 @@ The documentation can be found in L<AI::XGBoost::CAPI::RAW>
 Currently this module need the xgboost binary available in your system. 
 I'm going to make an Alien module for xgboost but meanwhile you need to
 compile yourself xgboost: L<https://github.com/dmlc/xgboost>
+
+=head1 FUNCTIONS
+
+=cut
+
+=head2 train
+
+=cut
+
+sub train {
+    my %args = @_;
+    my ($params, $data, $number_of_rounds) = @args{qw(params data number_of_rounds)};
+
+    my $booster = AI::XGBoost::Booster->new(cache => [$data]);
+    for my $iteration (0 .. $number_of_rounds - 1) {
+        $booster->update(dtrain => $data, iteration => $iteration); 
+    }
+    return $booster;
+}
 
 =head1 ROADMAP
 

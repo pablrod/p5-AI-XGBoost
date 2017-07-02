@@ -24,8 +24,8 @@ Work In Progress, the API may change. Comments and suggestions are welcome!
 
 =cut
 
-has handler => (
-    is => 'ro'
+has handle => (
+    is => 'ro',
 );
 
 =head2 FromFile
@@ -51,7 +51,12 @@ Supress messages
 sub FromFile {
     my ($package, %args) = @_;
     my $matrix = XGDMatrixCreateFromFile(@args{qw(filename silent)});
-    return __PACKAGE__->new(handler => $matrix);
+    return __PACKAGE__->new(handle => $matrix);
+}
+
+sub DEMOLISH {
+    my $self = shift();
+    XGDMatrixFree($self->handle);
 }
 
 1;
