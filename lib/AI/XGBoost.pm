@@ -15,13 +15,16 @@ use Exporter::Easy (
 
 =head1 SYNOPSIS
 
-# EXAMPLE: examples/capi.pl
+# EXAMPLE: examples/basic.pl
+
+# EXAMPLE: examples/iris.pl
 
 =head1 DESCRIPTION
 
-Perl wrapper for XGBoost library. This version only wraps part of the C API.
+Perl wrapper for XGBoost library. 
 
-The documentation can be found in L<AI::XGBoost::CAPI::RAW>
+This is a work in progress, feedback, comments, issues, suggestion and
+pull requests are welcome!!
 
 Currently this module need the xgboost binary available in your system. 
 I'm going to make an Alien module for xgboost but meanwhile you need to
@@ -40,6 +43,11 @@ sub train {
     my ($params, $data, $number_of_rounds) = @args{qw(params data number_of_rounds)};
 
     my $booster = AI::XGBoost::Booster->new(cache => [$data]);
+    if (defined $params) {
+        while (my ($name, $value) = each %$params) {
+            $booster->set_param($name, $value);
+        }
+    }
     for my $iteration (0 .. $number_of_rounds - 1) {
         $booster->update(dtrain => $data, iteration => $iteration); 
     }

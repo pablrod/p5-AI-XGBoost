@@ -4,39 +4,77 @@ AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost]
 
 # VERSION
 
-version 0.005
+version 0.006
 
 # SYNOPSIS
 
 ```perl
 use 5.010;
-use AI::XGBoost::CAPI qw(:all);
+use aliased 'AI::XGBoost::DMatrix';
+use AI::XGBoost qw(train);
 
-my $dtrain = XGDMatrixCreateFromFile('agaricus.txt.train');
-my $dtest = XGDMatrixCreateFromFile('agaricus.txt.test');
+# We are going to solve a binary classification problem:
+#  Mushroom poisonous or not
 
-my ($rows, $cols) = (XGDMatrixNumRow($dtrain), XGDMatrixNumCol($dtrain));
-say "Train dimensions: $rows, $cols";
+my $train_data = DMatrix->From(file => 'agaricus.txt.train');
+my $test_data = DMatrix->From(file => 'agaricus.txt.test');
 
-my $booster = XGBoosterCreate([$dtrain]);
+# With XGBoost we can solve this problem using 'gbtree' booster
+#  and as loss function a logistic regression 'binary:logistic'
+#  (Gradient Boosting Regression Tree)
+# XGBoost Tree Booster has a lot of parameters that we can tune
+# (https://github.com/dmlc/xgboost/blob/master/doc/parameter.md)
 
-for my $iter (0 .. 10) {
-    XGBoosterUpdateOneIter($booster, $iter, $dtrain);
-}
+my $booster = train(data => $train_data, number_of_rounds => 10, params => {
+        objective => 'binary:logistic',
+        eta => 1.0,
+        max_depth => 2,
+        silent => 1
+    });
 
-my $predictions = XGBoosterPredict($booster, $dtest);
-# say join "\n", @$predictions;
+# For binay classification predictions are probability confidence scores in [0, 1]
+#  indicating that the label is positive (1 in the first column of agaricus.txt.test)
+my $predictions = $booster->predict(data => $test_data);
 
-XGBoosterFree($booster);
-XGDMatrixFree($dtrain);
-XGDMatrixFree($dtest);
+say join "\n", @$predictions[0 .. 10];
+
+use aliased 'AI::XGBoost::DMatrix';
+use AI::XGBoost qw(train);
+use Data::Dataset::Classic::Iris;
+
+my %class = (
+    setosa => 0,
+    versicolor => 1,
+    virginica => 2
+);
+
+my $iris = Data::Dataset::Classic::Iris::get();
+
+my $train_dataset = [map {$iris->{$_}} grep {$_ ne 'species'} keys %$iris];
+my $test_dataset = [map {$iris->{$_}} grep {$_ ne 'species'} keys %$iris];
+my $train_label = [map {$class{$_}} @{$iris->{'species'}}];
+my $test_label = [map {$class{$_}} @{$iris->{'species'}}];
+
+my $train_data = DMatrix->From(matrix => $train_dataset, label => $train_label);
+my $test_data = DMatrix->From(matrix => $test_dataset, label => $test_label);
+
+my $booster = train(data => $train_data, number_of_rounds => 20, params => {
+        max_depth => 3,
+        eta => 0.3,
+        silent => 1,
+        objective => 'multi:softprob',
+        num_class => 3
+    });
+
+my $predictions = $booster->predict(data => $test_data);
 ```
 
 # DESCRIPTION
 
-Perl wrapper for XGBoost library. This version only wraps part of the C API.
+Perl wrapper for XGBoost library. 
 
-The documentation can be found in [AI::XGBoost::CAPI::RAW](https://metacpan.org/pod/AI::XGBoost::CAPI::RAW)
+This is a work in progress, feedback, comments, issues, suggestion and
+pull requests are welcome!!
 
 Currently this module need the xgboost binary available in your system. 
 I'm going to make an Alien module for xgboost but meanwhile you need to
@@ -87,7 +125,7 @@ Pablo Rodríguez González <pablo.rodriguez.gonzalez@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2017 by Pablo Rodríguez González.
+Copyright (c) 2017 by Pablo Rodríguez González.
 
 This is free software, licensed under:
 

@@ -6,10 +6,17 @@ use Exporter::Easy (
         TAGS => [
             all => [qw(
                 XGDMatrixCreateFromFile
+                XGDMatrixCreateFromMat
                 XGDMatrixNumRow
                 XGDMatrixNumCol
+                XGDMatrixSetFloatInfo
+                XGDMatrixGetFloatInfo
                 XGDMatrixFree
                 XGBoosterCreate
+                XGBoosterSetParam
+                XGBoosterSetAttr
+                XGBoosterGetAttr
+                XGBoosterGetAttrNames
                 XGBoosterUpdateOneIter
                 XGBoosterBoostOneIter
                 XGBoosterPredict
@@ -81,6 +88,43 @@ sub XGDMatrixCreateFromFile {
     return $matrix;
 }
 
+=head2 XGDMatrixCreateFromMat
+
+Create from dense matrix
+
+Parameters:
+
+=over 4
+
+=item matrix
+
+matrix data
+
+=item missing
+
+value indicating missing data (optional)
+
+=back
+
+Returns a loaded data matrix
+
+=cut 
+
+sub XGDMatrixCreateFromMat {
+    my ($data, $missing) = @_;
+    $missing //= "NaN";
+    # TODO Support simple arrays
+    # TODO Support PDL
+    # TODO ¿Adapters?
+    my $data_adapter = [ map {@$_} @$data ];
+    my $ncols = scalar @$data;
+    my $nrows = scalar @{$data->[0]};
+    my $matrix = 0;
+    my $error = AI::XGBoost::CAPI::RAW::XGDMatrixCreateFromMat($data_adapter, $nrows, $ncols, $missing, \$matrix);
+    _CheckCall($error);
+    return $matrix;
+}
+
 =head2 XGDMatrixNumRow
 
 Get number of rows
@@ -127,6 +171,28 @@ sub XGDMatrixNumCol {
     return $cols;
 }
 
+=head2 XGDMatrixSetFloatInfo 
+
+=cut
+
+sub XGDMatrixSetFloatInfo {
+    my ($matrix, $info, $data) = @_;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixSetFloatInfo($matrix, $info, $data, scalar @$data) );
+}
+
+=head2 XGDMatrixGetFloatInfo 
+
+=cut
+
+sub XGDMatrixGetFloatInfo {
+    my ($matrix, $info) = @_;
+    my $out_len = 0;
+    my $out_result = 0;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixGetFloatInfo($matrix, $info, \$out_len, \$out_result) );
+    my $ffi = FFI::Platypus->new();
+    return $ffi->cast(opaque => "float[$out_len]", $out_result);
+}
+
 =head2 XGDMatrixFree
 
 Free space in data matrix
@@ -170,6 +236,54 @@ sub XGBoosterCreate {
     my $booster = 0;
     _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterCreate($matrices, scalar @$matrices, \$booster) );
     return $booster;
+}
+
+=head2 XGBoosterSetParam
+
+=cut
+
+sub XGBoosterSetParam {
+    my ($booster, $name, $value) = @_;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterSetParam($booster, $name, $value) );
+}
+
+=head2 XGBoosterSetAttr
+
+=cut
+
+sub XGBoosterSetAttr {
+    my ($booster, $name, $value) = @_;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterSetAttr($booster, $name, $value) );
+}
+
+=head2 XGBoosterGetAttr
+
+=cut
+
+sub XGBoosterGetAttr {
+    my ($booster, $name) = @_;
+    my $value = 0;
+    my $success = -1;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterGetAttr($booster, $name, \$value, \$success) );
+    if ($success) {
+        my $ffi = FFI::Platypus->new();
+        return $ffi->cast(opaque => "string", $value); 
+    }
+    return ();
+}
+
+=head2 XGBoosterGetAttrNames
+
+=cut
+
+sub XGBoosterGetAttrNames {
+    my ($booster) = @_;
+    my $out_len = 0;
+    my $out_result = 0;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGBoosterGetAttrNames($booster, \$out_len, \$out_result) );
+    my $ffi = FFI::Platypus->new();
+    $out_result = $ffi->cast(opaque => "opaque[$out_len]", $out_result);
+    return [map {$ffi->cast(opaque => "string", $_)} @$out_result ];
 }
 
 =head2 XGBoosterUpdateOneIter
