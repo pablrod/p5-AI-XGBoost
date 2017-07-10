@@ -23,6 +23,9 @@ use Exporter::Easy (
 
 Perl wrapper for XGBoost library. 
 
+The easiest way to use the wrapper is using C<train>, but beforehand 
+you need the data to be used contained in a C<DMatrix> object
+
 This is a work in progress, feedback, comments, issues, suggestion and
 pull requests are welcome!!
 
@@ -35,6 +38,30 @@ compile yourself xgboost: L<https://github.com/dmlc/xgboost>
 =cut
 
 =head2 train
+
+Performs gradient boosting using the data and parameters passed
+
+Returns a trained AI::XGBoost::Booster used
+
+=head3 Parameters
+
+=over 4
+
+=item params
+
+Parameters for the booster object. 
+
+Full list available: https://github.com/dmlc/xgboost/blob/master/doc/parameter.md 
+
+=item data
+
+AI::XGBoost::DMatrix object used for training
+
+=item number_of_rounds
+
+Number of boosting iterations
+
+=back
 
 =cut
 
