@@ -255,7 +255,7 @@ Dimensions of the matrix. That is: rows, columns
 
 sub dims {
     my $self = shift();
-    return ($self->rows(), $self->cols());
+    return ($self->num_row(), $self->num_col());
 }
 
 =head2 DEMOLISH
