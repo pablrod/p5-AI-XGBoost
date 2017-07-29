@@ -117,8 +117,8 @@ sub XGDMatrixCreateFromMat {
     # TODO Support PDL
     # TODO ¿Adapters?
     my $data_adapter = [ map {@$_} @$data ];
-    my $ncols = scalar @$data;
-    my $nrows = scalar @{$data->[0]};
+    my $nrows = scalar @$data;
+    my $ncols = scalar @{$data->[0]};
     my $matrix = 0;
     my $error = AI::XGBoost::CAPI::RAW::XGDMatrixCreateFromMat($data_adapter, $nrows, $ncols, $missing, \$matrix);
     _CheckCall($error);
