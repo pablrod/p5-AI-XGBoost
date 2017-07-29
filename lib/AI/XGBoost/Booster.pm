@@ -114,7 +114,7 @@ sub predict {
     my $data = $args{'data'};
     my $result = XGBoosterPredict($self->_handle, $data->handle);
     my $result_size = scalar @$result;
-    my $matrix_rows = $data->rows;
+    my $matrix_rows = $data->num_row;
     if ($result_size != $matrix_rows && $result_size % $matrix_rows == 0) {
         my $col_size = $result_size / $matrix_rows;
         return [map {[@$result[$_ * $col_size .. $_ * $col_size + $col_size - 1]]} 0 .. $matrix_rows - 1];
