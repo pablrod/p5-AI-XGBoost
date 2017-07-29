@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost]
 
 # VERSION
 
-version 0.006
+version 0.007
 
 # SYNOPSIS
 
@@ -163,3 +163,7 @@ This is free software, licensed under:
 ```
 The Apache License, Version 2.0, January 2004
 ```
+
+# CONTRIBUTOR
+
+Ruben <me@ruben.tech>
