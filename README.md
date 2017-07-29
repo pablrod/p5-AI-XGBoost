@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost]
 
 # VERSION
 
-version 0.007
+version 0.008
 
 # SYNOPSIS
 
