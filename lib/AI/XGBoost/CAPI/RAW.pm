@@ -38,7 +38,7 @@ Returns string error information
 
 =cut
 
-sub XGBGetLastError :Args() :Native(xgboost) :Returns(string) {}
+sub XGBGetLastError : Args() : Native(xgboost) : Returns(string) { }
 
 =head2 XGDMatrixCreateFromFile
 
@@ -64,7 +64,7 @@ a loaded data matrix
 
 =cut 
 
-sub XGDMatrixCreateFromFile :Args(string, int, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromFile : Args(string, int, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixCreateFromCSREx
 
@@ -106,7 +106,8 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromCSREx :Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromCSREx : Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) : Native(xgboost) :
+  Returns(int) { }
 
 =head2 XGDMatrixCreateFromCSCEx
 
@@ -144,7 +145,8 @@ number of rows; when it's set to 0, then guess from data
 
 =cut
 
-sub XGDMatrixCreateFromCSCEx :Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromCSCEx : Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) : Native(xgboost) :
+  Returns(int) { }
 
 =head2 XGDMatrixCreateFromMat
 
@@ -178,7 +180,45 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromMat :Args(float[], uint64, uint64, float, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixCreateFromMat : Args(float[], uint64, uint64, float, opaque*) : Native(xgboost) : Returns(int) { }
+
+=head2 XGDMatrixCreateFromMat_omp
+
+Create matrix content from dense matrix
+
+Parameters:
+
+=over 4
+
+=item data 
+
+pointer to the data space
+
+=item nrow
+
+number of rows
+
+=item ncol
+
+number columns
+
+=item missing
+
+which value to represent missing value
+
+=item out
+
+created dmatrix
+
+=item nthread
+
+number of threads (up to maximum cores available, if <=0 use all cores)
+
+=back
+
+=cut
+
+sub XGDMatrixCreateFromMat_omp : Args(float[], uint64, uint64, float, opaque*, int) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixSliceDMatrix
 
@@ -208,7 +248,7 @@ a sliced new matrix
 
 =cut
 
-sub XGDMatrixSliceDMatrix :Args(opaque, int *, uint64, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSliceDMatrix : Args(opaque, int[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixNumRow
 
@@ -230,7 +270,7 @@ The address to hold number of rows.
 
 =cut
 
-sub XGDMatrixNumRow :Args(opaque, uint64*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixNumRow : Args(opaque, uint64*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixNumCol
 
@@ -252,7 +292,7 @@ The address to hold number of cols.
 
 =cut
 
-sub XGDMatrixNumCol :Args(opaque, uint64*) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixNumCol : Args(opaque, uint64*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixSaveBinary
 
@@ -278,7 +318,7 @@ print statistics when saving
 
 =cut
 
-sub XGDMatrixSaveBinary :Args(opaque, string, int) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSaveBinary : Args(opaque, string, int) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixSetFloatInfo
 
@@ -308,7 +348,7 @@ length of array
 
 =cut
 
-sub XGDMatrixSetFloatInfo :Args(opaque, string, float[], uint64) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSetFloatInfo : Args(opaque, string, float[], uint64) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixSetUIntInfo
 
@@ -338,7 +378,7 @@ length of array
 
 =cut
 
-sub XGDMatrixSetUIntInfo :Args(opaque, string, uint32 *, uint64) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSetUIntInfo : Args(opaque, string, uint32 *, uint64) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixSetGroup
 
@@ -364,7 +404,7 @@ length of the array
 
 =cut
 
-sub XGDMatrixSetGroup :Args(opaque, uint32 *, uint64) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixSetGroup : Args(opaque, uint32 *, uint64) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixGetFloatInfo
 
@@ -394,7 +434,7 @@ pointer to the result
 
 =cut
 
-sub XGDMatrixGetFloatInfo :Args(opaque, string, uint64 *, opaque *) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixGetFloatInfo : Args(opaque, string, uint64 *, opaque *) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixGetUIntInfo
 
@@ -424,7 +464,7 @@ pointer to the result
 
 =cut
 
-sub XGDMatrixGetUIntInfo :Args(opaque, string, uint64 *, opaque *) :Native(xgboost) :Returns(int) {}
+sub XGDMatrixGetUIntInfo : Args(opaque, string, uint64 *, opaque *) : Native(xgboost) : Returns(int) { }
 
 =head2 XGDMatrixFree
 
@@ -432,7 +472,7 @@ Free space in data matrix
 
 =cut
 
-sub XGDMatrixFree :Args(opaque) :Native(xgboost) :Returns(int) {} 
+sub XGDMatrixFree : Args(opaque) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterCreate
 
@@ -458,7 +498,7 @@ handle to the result booster
 
 =cut
 
-sub XGBoosterCreate :Args(opaque[], uint64, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterCreate : Args(opaque[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterFree
 
@@ -476,7 +516,7 @@ handle to be freed
 
 =cut
 
-sub XGBoosterFree :Args(opaque) :Native(xgboost) :Returns(int) {}
+sub XGBoosterFree : Args(opaque) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterSetParam
 
@@ -502,7 +542,7 @@ value of parameter
 
 =cut
 
-sub XGBoosterSetParam :Args(opaque, string, string) :Native(xgboost) :Returns(int) {}
+sub XGBoosterSetParam : Args(opaque, string, string) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterBoostOneIter
 
@@ -537,7 +577,7 @@ length of grad/hess array
 
 =cut
 
-sub XGBoosterBoostOneIter :Args(opaque, opaque, float[], float[], uint64) :Native(xgboost) :Returns(int) {}
+sub XGBoosterBoostOneIter : Args(opaque, opaque, float[], float[], uint64) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterUpdateOneIter
 
@@ -563,13 +603,13 @@ training data
 
 =cut
 
-sub XGBoosterUpdateOneIter :Args(opaque, int, opaque) :Native(xgboost) :Returns(int) {}
+sub XGBoosterUpdateOneIter : Args(opaque, int, opaque) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterEvalOneIter
 
 =cut
 
-sub XGBoosterEvalOneIter :Args(opaque, int, opaque[], opaque[], uint64, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterEvalOneIter : Args(opaque, int, opaque[], opaque[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterPredict
 
@@ -628,7 +668,7 @@ used to set a pointer to array
 
 =cut
 
-sub XGBoosterPredict :Args(opaque, opaque, int, uint, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterPredict : Args(opaque, opaque, int, uint, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterLoadModel
 
@@ -650,7 +690,7 @@ file name
 
 =cut
 
-sub XGBoosterLoadModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
+sub XGBoosterLoadModel : Args(opaque, string) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterSaveModel
 
@@ -673,61 +713,74 @@ file name
 
 =cut
 
-sub XGBoosterSaveModel :Args(opaque, string) :Native(xgboost) :Returns(int) {}
+sub XGBoosterSaveModel : Args(opaque, string) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterLoadModelFromBuffer
 
 =cut
 
-sub XGBoosterLoadModelFromBuffer :Args(opaque, opaque, uint64) :Native(xgboost) :Returns(int) {} 
+sub XGBoosterLoadModelFromBuffer : Args(opaque, opaque, uint64) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterGetModelRaw
 
 =cut
 
-sub XGBoosterGetModelRaw :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterGetModelRaw : Args(opaque, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterDumpModel
 
 =cut
 
-sub XGBoosterDumpModel :Args(opaque, string, int, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterDumpModel : Args(opaque, string, int, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterDumpModelEx
 
 =cut
 
-sub XGBoosterDumpModelEx :Args(opaque, string, int, string, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterDumpModelEx : Args(opaque, string, int, string, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterDumpModelWithFeatures
 
 =cut
 
-sub XGBoosterDumpModelWithFeatures :Args(opaque, int, opaque[], opaque[], int, uint64*, opaque*) Native(xgboost) :Returns(int) {}
+sub XGBoosterDumpModelWithFeatures : Args(opaque, int, opaque[], opaque[], int, uint64*, opaque*) Native(xgboost) :
+  Returns(int) { }
 
 =head2 XGBoosterDumpModelExWithFeatures
 
 =cut
 
-sub XGBoosterDumpModelExWithFeatures :Args(opaque, int, opaque[], opaque[], int, string, uint64*, opaque*) Native(xgboost) :Returns(int) {}
-
+sub XGBoosterDumpModelExWithFeatures : Args(opaque, int, opaque[], opaque[], int, string, uint64*, opaque*)
+  Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterSetAttr
 
 =cut
 
-sub XGBoosterSetAttr :Args(opaque, string, string) :Native(xgboost) :Returns(int) {}
+sub XGBoosterSetAttr : Args(opaque, string, string) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterGetAttr
 
 =cut
 
-sub XGBoosterGetAttr :Args(opaque, string, opaque*, int*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterGetAttr : Args(opaque, string, opaque*, int*) : Native(xgboost) : Returns(int) { }
 
 =head2 XGBoosterGetAttrNames
 
 =cut
 
-sub XGBoosterGetAttrNames :Args(opaque, uint64*, opaque*) :Native(xgboost) :Returns(int) {}
+sub XGBoosterGetAttrNames : Args(opaque, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+
+=head2 XGBoosterLoadRabitCheckpoint
+
+=cut
+
+sub XGBoosterLoadRabitCheckpoint : Args(opaque, int) : Native(xgboost) : Returns(int) { }
+
+=head2 XGBoosterSaveRabitCheckpoint
+
+=cut
+
+sub XGBoosterSaveRabitCheckpoint : Args(opaque) : Native(xgboost) : Returns(int) { }
 
 1;

@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost]
 
 # VERSION
 
-version 0.008
+version 0.1
 
 # SYNOPSIS
 
@@ -57,6 +57,23 @@ my $iris = Data::Dataset::Classic::Iris::get();
 # Split train and test, label and features
 my $train_dataset = [map {$iris->{$_}} grep {$_ ne 'species'} keys %$iris];
 my $test_dataset = [map {$iris->{$_}} grep {$_ ne 'species'} keys %$iris];
+
+sub transpose {
+# Transposing without using PDL, Data::Table, Data::Frame or other modules
+# to keep minimal dependencies
+    my $array = shift;
+    my @aux = ();
+    for my $row (@$array) {
+        for my $column (0 .. scalar @$row - 1) {
+            push @{$aux[$column]}, $row->[$column];
+        }
+    }
+    return \@aux;
+}
+
+$train_dataset = transpose($train_dataset);
+$test_dataset = transpose($test_dataset);
+
 my $train_label = [map {$class{$_}} @{$iris->{'species'}}];
 my $test_label = [map {$class{$_}} @{$iris->{'species'}}];
 
@@ -121,16 +138,16 @@ The goal is to make a full wrapper for XGBoost.
 
 ## VERSIONS
 
-- 0.1 
-
-    Full raw C API available as [AI::XGBoost::CAPI::RAW](https://metacpan.org/pod/AI::XGBoost::CAPI::RAW)
-
 - 0.2 
 
     Full C API "easy" to use, with PDL support as [AI::XGBoost::CAPI](https://metacpan.org/pod/AI::XGBoost::CAPI)
 
     Easy means clients don't have to use [FFI::Platypus](https://metacpan.org/pod/FFI::Platypus) or modules dealing
     with C structures
+
+- 0.25
+
+    Alien package for libxgboost.so/xgboost.dll
 
 - 0.3
 
@@ -156,13 +173,7 @@ Pablo Rodríguez González <pablo.rodriguez.gonzalez@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2017 by Pablo Rodríguez González.
-
-This is free software, licensed under:
-
-```
-The Apache License, Version 2.0, January 2004
-```
+Copyright (c) 2017 by Pablo Rodríguez González.
 
 # CONTRIBUTOR
 

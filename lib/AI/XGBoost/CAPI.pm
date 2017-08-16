@@ -11,6 +11,10 @@ use Exporter::Easy (
                 XGDMatrixNumCol
                 XGDMatrixSetFloatInfo
                 XGDMatrixGetFloatInfo
+                XGDMatrixSetUintInfo
+                XGDMatrixGetUintInfo
+                XGDMatrixSaveBinary
+                XGDMatrixSliceDMatrix
                 XGDMatrixFree
                 XGBoosterCreate
                 XGBoosterSetParam
@@ -191,6 +195,50 @@ sub XGDMatrixGetFloatInfo {
     _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixGetFloatInfo($matrix, $info, \$out_len, \$out_result) );
     my $ffi = FFI::Platypus->new();
     return $ffi->cast(opaque => "float[$out_len]", $out_result);
+}
+
+=head2 XGDMatrixSetUintInfo 
+
+=cut
+
+sub XGDMatrixSetUintInfo {
+    my ($matrix, $info, $data) = @_;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixSetUintInfo($matrix, $info, $data, scalar @$data) );
+}
+
+=head2 XGDMatrixGetUintInfo 
+
+=cut
+
+sub XGDMatrixGetUintInfo {
+    my ($matrix, $info) = @_;
+    my $out_len = 0;
+    my $out_result = 0;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixGetUintInfo($matrix, $info, \$out_len, \$out_result) );
+    my $ffi = FFI::Platypus->new();
+    return $ffi->cast(opaque => "uint32[$out_len]", $out_result);
+}
+
+=head2 XGDMatrixSaveBinary
+
+=cut
+
+sub XGDMatrixSaveBinary {
+    my ($matrix, $filename, $silent) = @_;
+    $silent //= 1;
+    _CheckCall( AI::XGBoost::CAPI::RAW::XGDMatrixSaveBinary($matrix, $filename, $silent));
+}
+
+=head2 XGDMatrixSliceDMatrix
+
+=cut
+
+sub XGDMatrixSliceDMatrix {
+    my ($matrix, $list_of_indices) = @_;
+    my $new_matrix = 0;
+    my $error = AI::XGBoost::CAPI::RAW::XGDMatrixSliceDMatrix($matrix, $list_of_indices, scalar @$list_of_indices, \$new_matrix);
+    _CheckCall($error);
+    return $new_matrix;
 }
 
 =head2 XGDMatrixFree

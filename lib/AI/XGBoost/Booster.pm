@@ -10,6 +10,7 @@ use utf8;
 
 use Moose;
 use AI::XGBoost::CAPI qw(:all);
+use namespace::autoclean;
 
 =encoding utf-8
 
@@ -164,6 +165,66 @@ sub get_attr {
     XGBoosterGetAttr($self->_handle, $name);
 }
 
+=head2 get_score
+
+Get importance of each feature
+
+=head3 Parameters
+
+=over 4
+
+=item importance_type
+
+Type of importance. Valid values:
+
+=over 4
+
+=item weight
+
+Number of times a feature is used to split the data across all trees
+
+=item gain
+
+Average gain of the feature when it is used in trees
+
+=item cover
+
+Average coverage of the feature when it is used in trees
+
+=back
+
+=item fmap
+
+Name of feature map file
+
+=back
+
+=cut
+
+sub get_score {
+    my $self = shift;
+    my %args = @_;
+    my ($fmap, $importance_type) = @args{qw(fmap importance_type)};
+
+    if ($importance_type eq "weight") {
+        my @trees = $self->get_dump;
+    } else {
+
+    }
+
+}
+
+
+=head2 get_dump
+
+=cut
+
+sub get_dump {
+    my $self = shift;
+    return XGBoosterDumpModelEx($self->_handle, "", 1, "text");
+}
+
+
 =head2 attributes
 
 Returns all attributes of the booster as a HASHREF
@@ -214,6 +275,8 @@ sub DEMOLISH {
     my $self = shift();
     XGBoosterFree($self->_handle);
 }
+
+__PACKAGE__->meta->make_immutable();
 
 1;
  

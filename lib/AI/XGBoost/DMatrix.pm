@@ -11,6 +11,7 @@ use utf8;
 use Moose;
 use AI::XGBoost::CAPI qw(:all);
 use Carp;
+use namespace::autoclean;
 
 =encoding utf-8
 
@@ -136,6 +137,33 @@ sub set_float_info {
     return $self;
 }
 
+=head2 set_float_info_pdl
+
+Set float type property
+
+=head3 Parameters
+
+=over 4
+
+=item field
+
+Field name of the information
+
+=item info
+
+Piddle with the information
+
+=back
+
+=cut
+
+sub set_float_info_pdl {
+    my $self = shift();
+    my ($field, $info) = @_;
+    XGDMatrixSetFloatInfo($self->handle, $field, $info->flat()->unpdl());
+    return $self;
+}
+
 =head2 get_float_info
 
 Get float type property
@@ -158,6 +186,85 @@ sub get_float_info {
     XGDMatrixGetFloatInfo($self->handle, $field);
 }
 
+=head2 set_uint_info
+
+Set uint type property
+
+=head3 Parameters
+
+=over 4
+
+=item field
+
+Field name of the information
+
+=item info
+
+array with the information
+
+=back
+
+=cut
+
+sub set_uint_info {
+    my $self = shift();
+    my ($field, $info) = @_;
+    XGDMatrixSetUintInfo($self->handle, $field, $info);
+    return $self;
+}
+
+=head2 get_uint_info
+
+Get uint type property
+
+=head3 Parameters
+
+=over 4
+
+=item field
+
+Field name of the information
+
+=back
+
+=cut
+
+sub get_uint_info {
+    my $self = shift();
+    my $field = shift();
+    XGDMatrixGetUintInfo($self->handle, $field);
+}
+
+=head2 save_binary
+
+Save DMatrix object as a binary file.
+
+This file should be used with L<FromFile>
+
+=head3 Parameters
+
+=over 4
+
+=item filename
+
+Filename and path
+
+=item silent
+
+Don't show information messages, optional, default 1
+
+=back
+
+=cut
+
+sub save_binary {
+    my $self = shift();
+    my ($filename, $silent) = @_;
+    $silent //= 1;
+    XGDMatrixSaveBinary($self->handle, $filename, $silent);
+    return $self;
+}
+
 =head2 set_label
 
 Set label of DMatrix. This label is the "classes" in classification problems
@@ -178,6 +285,28 @@ sub set_label {
     my $self = shift();
     my $label = shift();
     $self->set_float_info('label', $label);
+}
+
+=head2 set_label_pdl
+
+Set label of DMatrix. This label is the "classes" in classification problems
+
+=head3 Parameters
+
+=over 4
+
+=item data
+
+Piddle with the labels
+
+=back
+
+=cut
+
+sub set_label_pdl {
+    my $self = shift();
+    my $label = shift();
+    $self->set_float_info_pdl('label', $label->flat()->unpdl());
 }
 
 =head2 get_label
@@ -214,6 +343,30 @@ sub set_weight {
     return $self;
 }
 
+=head2 set_weight_pdl
+
+Set weight of each instance
+
+=head3 Parameters
+
+=over 4
+
+=item weight
+
+pdl with the weights
+
+=back 
+
+=cut
+
+sub set_weight_pdl {
+    my $self = shift();
+    my $weight = shift();
+    $self->set_float_info('weight', $weight->flat()->unpdl());
+    return $self;
+}
+
+
 =head2 get_weight
 
 Get the weight of each instance
@@ -223,6 +376,63 @@ Get the weight of each instance
 sub get_weight {
     my $self = shift();
     $self->get_float_info('weight');
+}
+
+=head2 set_base_margin
+
+Set base margin of booster to start from
+
+=head3 Parameters
+
+=over 4
+
+=item margin
+
+Array with the margins
+
+=back 
+
+=cut
+
+sub set_base_margin {
+    my $self = shift();
+    my $margin = shift();
+    $self->set_float_info('base_margin', $margin);
+    return $self;
+}
+
+=head2 get_base_margin
+
+Get the base margin
+
+=cut
+
+sub get_base_margin {
+    my $self = shift();
+    $self->get_float_info('base_margin');
+}
+
+=head2 set_group
+
+Set group size
+
+=head3 Parameters
+
+=over 4
+
+=item group
+
+Array with the size of each group
+
+=back
+
+=cut
+
+sub set_group {
+    my $self = shift();
+    my $group = shift();
+    XGDMatrixSetGroup($self->handle, $group);
+    return $self;
 }
 
 =head2 num_row
@@ -258,9 +468,35 @@ sub dims {
     return ($self->num_row(), $self->num_col());
 }
 
+=head2 slice
+
+Slice the DMatrix and return a new DMatrix tha only contains
+the list of indices
+
+=head3 Parameters
+
+=over 4
+
+=item list_of_indices
+
+Reference to an array of indices
+
+=back
+
+=cut
+
+sub slice {
+    my $self = shift;
+    my ($list_of_indices) = @_;
+    my $handle = XGDMatrixSliceDMatrix($self->handle(), $list_of_indices);
+    return __PACKAGE__->new(handle => $handle);
+}
+
 =head2 DEMOLISH
 
-Free the
+Free the DMatrix
+
+This method gets called automatically
 
 =cut
 
@@ -268,6 +504,8 @@ sub DEMOLISH {
     my $self = shift();
     XGDMatrixFree($self->handle);
 }
+
+__PACKAGE__->meta->make_immutable();
 
 1;
  

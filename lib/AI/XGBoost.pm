@@ -3,9 +3,7 @@ use strict;
 use warnings;
 
 use AI::XGBoost::Booster;
-use Exporter::Easy (
-    OK => ['train']
-);
+use Exporter::Easy ( OK => ['train'] );
 
 # VERSION
 
@@ -67,16 +65,16 @@ Number of boosting iterations
 
 sub train {
     my %args = @_;
-    my ($params, $data, $number_of_rounds) = @args{qw(params data number_of_rounds)};
+    my ( $params, $data, $number_of_rounds ) = @args{qw(params data number_of_rounds)};
 
-    my $booster = AI::XGBoost::Booster->new(cache => [$data]);
-    if (defined $params) {
-        while (my ($name, $value) = each %$params) {
-            $booster->set_param($name, $value);
+    my $booster = AI::XGBoost::Booster->new( cache => [$data] );
+    if ( defined $params ) {
+        while ( my ( $name, $value ) = each %$params ) {
+            $booster->set_param( $name, $value );
         }
     }
-    for my $iteration (0 .. $number_of_rounds - 1) {
-        $booster->update(dtrain => $data, iteration => $iteration); 
+    for my $iteration ( 0 .. $number_of_rounds - 1 ) {
+        $booster->update( dtrain => $data, iteration => $iteration );
     }
     return $booster;
 }
@@ -89,16 +87,16 @@ The goal is to make a full wrapper for XGBoost.
 
 =over 4
 
-=item 0.1 
-
-Full raw C API available as L<AI::XGBoost::CAPI::RAW>
-
 =item 0.2 
 
 Full C API "easy" to use, with PDL support as L<AI::XGBoost::CAPI>
 
 Easy means clients don't have to use L<FFI::Platypus> or modules dealing
 with C structures
+
+=item 0.25
+
+Alien package for libxgboost.so/xgboost.dll
 
 =item 0.3
 
