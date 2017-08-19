@@ -2,7 +2,11 @@ package AI::XGBoost::CAPI::RAW;
 use strict;
 use warnings;
 
-use parent 'NativeCall';
+use Alien::XGBoost;
+use FFI::Platypus;
+
+my $ffi = FFI::Platypus->new;
+$ffi->lib(Alien::XGBoost->dynamic_libs);
 
 # VERSION
 
@@ -38,7 +42,7 @@ Returns string error information
 
 =cut
 
-sub XGBGetLastError : Args() : Native(xgboost) : Returns(string) { }
+$ffi->attach(XGBGetLastError => [] => 'string');
 
 =head2 XGDMatrixCreateFromFile
 
@@ -64,7 +68,7 @@ a loaded data matrix
 
 =cut 
 
-sub XGDMatrixCreateFromFile : Args(string, int, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixCreateFromFile => [qw(string int opaque*)] => 'int');
 
 =head2 XGDMatrixCreateFromCSREx
 
@@ -106,8 +110,7 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromCSREx : Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) : Native(xgboost) :
-  Returns(int) { }
+$ffi->attach(XGDMatrixCreateFromCSREx => [qw(size_t[] uint[] float[] size_t size_t size_t opaque*)] => 'int');
 
 =head2 XGDMatrixCreateFromCSCEx
 
@@ -145,8 +148,7 @@ number of rows; when it's set to 0, then guess from data
 
 =cut
 
-sub XGDMatrixCreateFromCSCEx : Args(size_t[], uint[], float[], size_t, size_t, size_t, opaque*) : Native(xgboost) :
-  Returns(int) { }
+$ffi->attach(XGDMatrixCreateFromCSCEx => [qw(size_t[] uint[] float[] size_t size_t size_t opaque*)] => 'int');
 
 =head2 XGDMatrixCreateFromMat
 
@@ -180,7 +182,7 @@ created dmatrix
 
 =cut
 
-sub XGDMatrixCreateFromMat : Args(float[], uint64, uint64, float, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixCreateFromMat => [qw(float[] uint64 uint64 float opaque*)] => 'int');
 
 =head2 XGDMatrixCreateFromMat_omp
 
@@ -218,7 +220,7 @@ number of threads (up to maximum cores available, if <=0 use all cores)
 
 =cut
 
-sub XGDMatrixCreateFromMat_omp : Args(float[], uint64, uint64, float, opaque*, int) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixCreateFromMat_omp => [qw(float[] uint64 uint64 float opaque* int)] => 'int');
 
 =head2 XGDMatrixSliceDMatrix
 
@@ -248,7 +250,7 @@ a sliced new matrix
 
 =cut
 
-sub XGDMatrixSliceDMatrix : Args(opaque, int[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixSliceDMatrix => [qw(opaque int[] uint64 opaque*)] => 'int');
 
 =head2 XGDMatrixNumRow
 
@@ -270,7 +272,7 @@ The address to hold number of rows.
 
 =cut
 
-sub XGDMatrixNumRow : Args(opaque, uint64*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixNumRow => [qw(opaque uint64*)] => 'int');
 
 =head2 XGDMatrixNumCol
 
@@ -292,7 +294,7 @@ The address to hold number of cols.
 
 =cut
 
-sub XGDMatrixNumCol : Args(opaque, uint64*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixNumCol => [qw(opaque uint64*)] => 'int');
 
 =head2 XGDMatrixSaveBinary
 
@@ -318,7 +320,7 @@ print statistics when saving
 
 =cut
 
-sub XGDMatrixSaveBinary : Args(opaque, string, int) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixSaveBinary => [qw(opaque string int)] => 'int');
 
 =head2 XGDMatrixSetFloatInfo
 
@@ -348,7 +350,7 @@ length of array
 
 =cut
 
-sub XGDMatrixSetFloatInfo : Args(opaque, string, float[], uint64) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixSetFloatInfo => [qw(opaque string float[] uint64)] => 'int');
 
 =head2 XGDMatrixSetUIntInfo
 
@@ -378,7 +380,7 @@ length of array
 
 =cut
 
-sub XGDMatrixSetUIntInfo : Args(opaque, string, uint32 *, uint64) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixSetUIntInfo => [qw(opaque string uint32* uint64)] => 'int');
 
 =head2 XGDMatrixSetGroup
 
@@ -404,7 +406,7 @@ length of the array
 
 =cut
 
-sub XGDMatrixSetGroup : Args(opaque, uint32 *, uint64) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixSetGroup => [qw(opaque uint32* uint64)] => 'int');
 
 =head2 XGDMatrixGetFloatInfo
 
@@ -434,7 +436,7 @@ pointer to the result
 
 =cut
 
-sub XGDMatrixGetFloatInfo : Args(opaque, string, uint64 *, opaque *) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixGetFloatInfo => [qw(opaque string uint64* opaque*)] => 'int');
 
 =head2 XGDMatrixGetUIntInfo
 
@@ -464,7 +466,7 @@ pointer to the result
 
 =cut
 
-sub XGDMatrixGetUIntInfo : Args(opaque, string, uint64 *, opaque *) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixGetUIntInfo => [qw(opaque string uint64* opaque*)] => 'int');
 
 =head2 XGDMatrixFree
 
@@ -472,7 +474,7 @@ Free space in data matrix
 
 =cut
 
-sub XGDMatrixFree : Args(opaque) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGDMatrixFree => [qw(opaque)] => 'int');
 
 =head2 XGBoosterCreate
 
@@ -498,7 +500,7 @@ handle to the result booster
 
 =cut
 
-sub XGBoosterCreate : Args(opaque[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterCreate => [qw(opaque[] uint64 opaque*)] => 'int');
 
 =head2 XGBoosterFree
 
@@ -516,7 +518,7 @@ handle to be freed
 
 =cut
 
-sub XGBoosterFree : Args(opaque) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterFree => [qw(opaque)] => 'int');
 
 =head2 XGBoosterSetParam
 
@@ -542,7 +544,7 @@ value of parameter
 
 =cut
 
-sub XGBoosterSetParam : Args(opaque, string, string) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterSetParam => [qw(opaque string string)] => 'int');
 
 =head2 XGBoosterBoostOneIter
 
@@ -577,7 +579,7 @@ length of grad/hess array
 
 =cut
 
-sub XGBoosterBoostOneIter : Args(opaque, opaque, float[], float[], uint64) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterBoostOneIter => [qw(opaque opaque float[] float[] uint64)] => 'int');
 
 =head2 XGBoosterUpdateOneIter
 
@@ -603,13 +605,13 @@ training data
 
 =cut
 
-sub XGBoosterUpdateOneIter : Args(opaque, int, opaque) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterUpdateOneIter => [qw(opaque int opaque)] => 'int');
 
 =head2 XGBoosterEvalOneIter
 
 =cut
 
-sub XGBoosterEvalOneIter : Args(opaque, int, opaque[], opaque[], uint64, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterEvalOneIter => [qw(opaque int opaque[] opaque[] uint64 opaque*)] => 'int');
 
 =head2 XGBoosterPredict
 
@@ -668,7 +670,7 @@ used to set a pointer to array
 
 =cut
 
-sub XGBoosterPredict : Args(opaque, opaque, int, uint, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterPredict => [qw(opaque opaque int uint uint64* opaque*)] => 'int');
 
 =head2 XGBoosterLoadModel
 
@@ -690,7 +692,7 @@ file name
 
 =cut
 
-sub XGBoosterLoadModel : Args(opaque, string) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterLoadModel => [qw(opaque string)] => 'int');
 
 =head2 XGBoosterSaveModel
 
@@ -713,74 +715,72 @@ file name
 
 =cut
 
-sub XGBoosterSaveModel : Args(opaque, string) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterSaveModel => [qw(opaque string)] => 'int');
 
 =head2 XGBoosterLoadModelFromBuffer
 
 =cut
 
-sub XGBoosterLoadModelFromBuffer : Args(opaque, opaque, uint64) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterLoadModelFromBuffer => [qw(opaque opaque uint64)] => 'int');
 
 =head2 XGBoosterGetModelRaw
 
 =cut
 
-sub XGBoosterGetModelRaw : Args(opaque, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterGetModelRaw => [qw(opaque uint64* opaque*)] => 'int');
 
 =head2 XGBoosterDumpModel
 
 =cut
 
-sub XGBoosterDumpModel : Args(opaque, string, int, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterDumpModel => [qw(opaque string int uint64* opaque*)] => 'int');
 
 =head2 XGBoosterDumpModelEx
 
 =cut
 
-sub XGBoosterDumpModelEx : Args(opaque, string, int, string, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterDumpModelEx => [qw(opaque string int string uint64* opaque*)] => 'int');
 
 =head2 XGBoosterDumpModelWithFeatures
 
 =cut
 
-sub XGBoosterDumpModelWithFeatures : Args(opaque, int, opaque[], opaque[], int, uint64*, opaque*) Native(xgboost) :
-  Returns(int) { }
+$ffi->attach(XGBoosterDumpModelWithFeatures => [qw(opaque int opaque[] opaque[] int uint64* opaque*)] => 'int');
 
 =head2 XGBoosterDumpModelExWithFeatures
 
 =cut
 
-sub XGBoosterDumpModelExWithFeatures : Args(opaque, int, opaque[], opaque[], int, string, uint64*, opaque*)
-  Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterDumpModelExWithFeatures => [qw(opaque int opaque[] opaque[] int string uint64* opaque*)] => 'int');
 
 =head2 XGBoosterSetAttr
 
 =cut
 
-sub XGBoosterSetAttr : Args(opaque, string, string) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterSetAttr => [qw(opaque string string)] => 'int');
 
 =head2 XGBoosterGetAttr
 
 =cut
 
-sub XGBoosterGetAttr : Args(opaque, string, opaque*, int*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterGetAttr => [qw(opaque string opaque* int*)] => 'int');
 
 =head2 XGBoosterGetAttrNames
 
 =cut
 
-sub XGBoosterGetAttrNames : Args(opaque, uint64*, opaque*) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterGetAttrNames => [qw(opaque uint64* opaque*)] => 'int');
 
 =head2 XGBoosterLoadRabitCheckpoint
 
 =cut
 
-sub XGBoosterLoadRabitCheckpoint : Args(opaque, int) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterLoadRabitCheckpoint => [qw(opaque int)] => 'int');
 
 =head2 XGBoosterSaveRabitCheckpoint
 
 =cut
 
-sub XGBoosterSaveRabitCheckpoint : Args(opaque) : Native(xgboost) : Returns(int) { }
+$ffi->attach(XGBoosterSaveRabitCheckpoint => [qw(opaque)] => 'int');
 
 1;

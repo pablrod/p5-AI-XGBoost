@@ -27,9 +27,8 @@ you need the data to be used contained in a C<DMatrix> object
 This is a work in progress, feedback, comments, issues, suggestion and
 pull requests are welcome!!
 
-Currently this module need the xgboost binary available in your system. 
-I'm going to make an Alien module for xgboost but meanwhile you need to
-compile yourself xgboost: L<https://github.com/dmlc/xgboost>
+XGBoost library is used via L<Alien::XGBoost>. That means downloading,
+compiling and installing if it's not available in your system.
 
 =head1 FUNCTIONS
 

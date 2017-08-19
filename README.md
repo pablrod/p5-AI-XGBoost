@@ -4,7 +4,7 @@ AI::XGBoost - Perl wrapper for XGBoost library [https://github.com/dmlc/xgboost]
 
 # VERSION
 
-version 0.1
+version 0.11
 
 # SYNOPSIS
 
@@ -104,9 +104,8 @@ you need the data to be used contained in a `DMatrix` object
 This is a work in progress, feedback, comments, issues, suggestion and
 pull requests are welcome!!
 
-Currently this module need the xgboost binary available in your system. 
-I'm going to make an Alien module for xgboost but meanwhile you need to
-compile yourself xgboost: [https://github.com/dmlc/xgboost](https://github.com/dmlc/xgboost)
+XGBoost library is used via [Alien::XGBoost](https://metacpan.org/pod/Alien::XGBoost). That means downloading,
+compiling and installing if it's not available in your system.
 
 # FUNCTIONS
 
@@ -174,6 +173,12 @@ Pablo Rodríguez González <pablo.rodriguez.gonzalez@gmail.com>
 # COPYRIGHT AND LICENSE
 
 Copyright (c) 2017 by Pablo Rodríguez González.
+
+This is free software, licensed under:
+
+```
+The Apache License, Version 2.0, January 2004
+```
 
 # CONTRIBUTOR
 
