@@ -174,12 +174,6 @@ Pablo Rodríguez González <pablo.rodriguez.gonzalez@gmail.com>
 
 Copyright (c) 2017 by Pablo Rodríguez González.
 
-This is free software, licensed under:
-
-```
-The Apache License, Version 2.0, January 2004
-```
-
 # CONTRIBUTOR
 
 Ruben <me@ruben.tech>
